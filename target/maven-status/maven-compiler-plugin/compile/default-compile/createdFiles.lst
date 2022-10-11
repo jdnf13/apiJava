@@ -1,0 +1,9 @@
+productos/apiJava/models/ArticuloModel.class
+productos/apiJava/repositories/UsuarioRepository.class
+productos/apiJava/controllers/ArticuloController.class
+productos/apiJava/models/UsuarioModel.class
+productos/apiJava/repositories/ArticuloRepository.class
+productos/apiJava/ApiJavaApplication.class
+productos/apiJava/controllers/UsuarioController.class
+productos/apiJava/services/UsuarioService.class
+productos/apiJava/services/ArticuloService.class
