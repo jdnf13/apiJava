@@ -42,4 +42,9 @@ public class UsuarioService {
             return false;
         }
     }
+    public ArrayList responseFail() {
+        ArrayList<String> nombreArrayList = new ArrayList<String>();
+        nombreArrayList.add("Error al consultar usuarios");
+        return nombreArrayList;
+    }
 }

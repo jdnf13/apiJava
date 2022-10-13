@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import antlr.collections.impl.Vector;
 import productos.apiJava.models.UsuarioModel;
 import productos.apiJava.services.UsuarioService;
 
@@ -21,6 +26,12 @@ import productos.apiJava.services.UsuarioService;
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
+
+    @Value("${keyEmpresa}")
+    private String keyEmpresa;
+
+    @Value("${empresa}")
+    private String empresa;
 
     @GetMapping()
     public ArrayList<UsuarioModel> traerUsuarios(){
@@ -42,7 +53,21 @@ public class UsuarioController {
 
     @GetMapping(path = "/query")
     public ArrayList<UsuarioModel> traerPorCorreo(@RequestParam("correo") String correo){
-        return this.usuarioService.traerPorCorreo(correo);
+        System.out.println("Leido desde properties ---> "+keyEmpresa);
+
+        DecodedJWT decodedJWT = JWT.decode(keyEmpresa);
+        String keyS = decodedJWT.getClaim("keySecret").asString();
+        System.out.println("decodificado ---> "+keyS);
+        if(keyS.equals(empresa)){
+            System.out.println("bien ---> "+keyS+" - "+empresa);
+
+            return this.usuarioService.traerPorCorreo(correo);
+        }else{
+            System.out.println("mal ---> "+keyS+" - "+empresa);
+
+            return this.usuarioService.responseFail();
+        }
+
     }
 
     @DeleteMapping(path = "/{id}")
